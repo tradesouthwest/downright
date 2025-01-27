@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0, height=device-height, minimum-scale=1.0">-->
+    <meta name="viewport" content="width=device-width initial-scale=1,
+	maximum-scale=1.0, user-scalable=no" />
+    <title>Down Right | Four Clicks Game by Tradesouthwest v1.0.1</title>
+    <meta name="description" content="Down Right game of chance and strategy">
+    <meta name="author" content="Tradesouthwest">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="768">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="shortcut icon" type="image/png" href="icon.png">
+    <!--<link rel="manifest" href="fourclicks.webmanifest">-->
+    <!--<link rel="stylesheet" type="text/css" href="fonts/normalize.css">-->
+    <link rel="stylesheet" type="text/css" href="stylesheet.css">
+
+</head>
+
+
+<body onload="check_storage()">
+<header class="main-header">
+	<!--<span><img src="https://findpetwatcher.com/downright/icons/downright-logo-512x512.png" height="60" alt="by: TSW"/></span>-->
+    <h1>Down Right - Move down or right only.</h1>
+	<h5> [4 clicks per Move - Rules at bottom of page.]</h5>
+</header>
+<div class="page">
+    <div id="container" class="rectangles">
+        <div id="player" class="circle sqrone"><span id="playerAMvs"></span></div>
+        <div id="chaser" class="circle sqrtwo"><span id="playerBMvs"></span></div>
+        
+		
+        <div class="bzone-wrap">
+            <div id="bzone"></div>
+        </div>
+
+    </div>
+
+	<div class="collision" style="opacity: 0;"> 
+		<span id="restarts"></span> 
+	</div>
+    
+	<div class="clearfix"></div>
+	<div class="control-section">
+        <table>
+            <thead>
+            <tr>
+                <th class="p1h">down</th>
+                <th class="p1h">right</th>
+                <th class="p2h">down</th>
+                <th class="p2h">right</th>
+            </tr>
+            </thead>
+            <tbody class="button-fieldset">
+            <tr>
+                <td class="p1h">
+                    <button id="button" class="coords plyr1b"><strong onclick="atrailFunc('amove')">&#x25BC;</strong></button>
+                </td>
+                <td class="p1h">
+                    <button id="chaseme" class="coords plyr1b"><strong onclick="atrailFunc('bmove')"><span>&#x25B2; </span></strong></button>
+                </td>
+                <td class="p2h">
+                    <button id="buttonb" class="coords ply2b"><strong onclick="atrailFunc('cmove')">&#x25BC;</strong></button>
+                </td>
+                <td class="p2h">
+                    <button id="chasemeb" class="coords ply2b"><strong onclick="atrailFunc('dmove')"><span>&#x25B2; </span></strong></button>
+                </td>
+            </tr>
+            <tr class="resetter">
+                <td class="p1h"><p><samp>moves: </samp><span id="plAMoves" class="bky"></span></p>
+                </td>
+                <td colspan="2">
+                    <div class="reset-section">
+                        <p> 
+							<img src="icons/tswlogo-156x56.png" height="28" alt="TSW"/>
+                        </p>
+                    </div>
+                </td>
+                <td class="p2h"><p><samp>moves: </samp><span id="plBMoves" class="bky"></span></p>
+                </td>
+            </tr>
+			<tr class="resetter">
+                <td class="p1">
+					<a id="openRules" href="#instruct" title="instructions" onclick="openRules()">How2Play</a> 
+					<br>(4 moves per play)
+                </td>
+                <td colspan="2">
+                    <div class="reset-section">
+                        <p>
+                            <button id="reload" class="reload" onclick="reLoad(this)">New Game</button>
+                        </p>
+                    </div>
+                </td>
+                <td class="p2">
+					<img src="icons/downright-logo-512x512.png" height="32" alt="TSW"/>
+                </td>
+            </tr>
+            <tr style="visibility: hidden;visibility: collapse;">
+                <td>position: </td>
+                <td><em>right: </em><span id="skore"></span>
+                    <br><em>down: </em><span id="score"></span></td>
+                <td><em>right: </em><span id="skoreb"></span>
+                    <br><em>down: </em><span id="scoreb"></span> </td>
+                <td>position: </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <!--<div class="scoreboard-section">
+
+    </div>-->
+</div>
+<footer id="notes" class="notes">
+    <nav><ul>
+	<li> <small>Down Right game by TSW</small> <small>ver: 1.0.13 </small></li>
+	</ul></nav><br>
+	<ul id="instruct" class="instructions">
+        <li class="background-switcher">
+            <h4 style="color:#646464">SETTINGS</h4> new background <a id="BkConnect" class="bkgrnd" href="javascript:void(0)" title="connectors" onclick="chngBackground('connect')">connekt</a> <a id="BkPolkaDots" class="bkgrnd" href="javascript:void(0)" title="polka dots" onclick="chngBackground('polka')">dots</a> <a id="BkBoxey" class="bkgrnd" href="javascript:void(0)" title="boxes" onclick="chngBackground('boxey')">boxey</a> <a id="BkDiags" class="bkgrnd" href="javascript:void(0)" title="diaginals" onclick="chngBackground('diags')">diaginals</a> <a id="BkRectangles" class="bkgrnd" href="javascript:void(0)" title="rectangles" onclick="chngBackground('rectangles')">rectangls</a> <span style="float:right">
+                <a id="BkClear" class="clearing" href="javascript:void(0)" title="clear"
+                   onclick="clearBackground()" >[clear] eat all cookies</a></span>
+        </li>
+        <!--<li class="bbox-aligner">adjust destination box
+            <button id="downAlign" onclick="mvDestDwn('10')">^</button>
+            <button id="rightAlign" onclick="mvDestRht('10')">></button>
+        </li>-->
+        <li>
+            <hr>
+        </li>
+        <li>
+            <h4 style="color:#646464">DESCRIPTION</h4></li>
+        <li class="descript">
+            <p>Game of strategy and chance. Could be pictured as a dice rolling game yet this game uses a random number generator which, sets how many pixels to move player, each time move button is clicked. Player can only move to the Right or Down. Winner is the player who gets to the black box at the bottom of playing field. Only four moves per player with option to earn 4 new moves on colliding with other player. </p>
+        </li>
+        <li>
+            <hr>
+        </li>
+        <li>
+            <h4 style="color:#646464">HOW TO PLAY</h4></li>
+        <li><em>#</em> Use the Right and Down buttons, below the playing field to move your player.</li>
+        <li><em>#</em> Each player gets 4 moves in either direction and with any combination of Right or Down moves.</li>
+        <li><em>#</em> Must use <strong>ALL 4 moves</strong> per player turn. (Even approaching black box - if last of 4 moves goes past box you lose )</li>
+        <li><em>#</em> Catch player to get 4 free moves - but ONLY 4 - Count 4 from hit, NOT remaining moves + 4 (Warning appears for **VALID** collision (must occupy 50% of player)).</li>
+        <li><em>#</em> Winner gets behind black zone first. <strong>Must not! be visible beyond edges of box.</strong> But trailing player gets to attempt win with 4 moves only. If both players are in box, successfully, game <em>can</em> be a tie.</li>
+        <li><em>#</em> If player goes past dark zone on 4th move, other player gets only 4 moves to try for win. Collision may happen but no added moves are required when both players are inside of black zone.</li>
+        <li><em>#</em> If no player resolves to box, then lowest number of moves wins. Moves score can be used to determine a tie as well. Rules are flexible if players agree.</li>
+        <li>
+            <hr>
+        </li>
+        <li>Note that "show score" totals are not the same as right/down count. Score is the number of pixels moved. An offset is added to score for starting poistion.</li>
+        <li>Also note that four moves is not the only way to play this game. You can set the number of moves and other rules as you see fit.</li>
+        <li><img src="icons/tswlogo-156x56.png" alt="TSW" width="134" /> <small>Brought to you by TradeSouthWest tradesouthwest.com</small></li>
+    </ul>
+</footer>
+<div class="audContainer" style="visibility: hidden;">
+	<audio preload="auto" id="collAudio"><source src="data/bleeps-1.wav"></source></audio>
+	<audio preload="auto" id="dropAudio"><source src="data/collect.wav"></source></audio>
+	<audio preload="auto" id="resetAudio"><source src="data/fast-1.wav"></source></audio>
+</div>
+<script>
+		/*function btrailFunc() {
+			var atrl = document.getElementById("chaser");
+			  atrl.classList.add('aplaymove');
+			  setTimeout(function(e){
+				atrl.classList.remove('aplaymove');
+			  }, 600 );
+		} */
+		function atrailFunc(v) {
+
+			var atrl = document.getElementById("player");
+			var btrl = document.getElementById("chaser");
+			var drop = document.getElementById("dropAudio");
+			if ( v === 'amove' ) {
+				
+			atrl.classList.add('aplaymove');
+			
+			  setTimeout(function(){
+				atrl.classList.remove('aplaymove');
+			  }, 400 );
+			  drop.play();
+			}
+			else if ( v === 'bmove' ) {
+				atrl.classList.add('aplaymove');
+				
+			  setTimeout(function(){
+				atrl.classList.remove('aplaymove');
+			  }, 400 );
+			  drop.play();
+
+			}
+			else if ( v === 'cmove' ) {
+				
+				btrl.classList.add('bplaymove');
+			  setTimeout(function(){
+				btrl.classList.remove('bplaymove');
+			  }, 400 );
+			  drop.play();
+			}
+			else if ( v === 'dmove' ) {
+				btrl.classList.add('bplaymove');
+				
+			  setTimeout(function(){
+				btrl.classList.remove('bplaymove');
+			  }, 400 );
+			  drop.play();
+
+			}
+		}
+
+
+		</script>
+
+<script type="application/javascript">
+
+	function mvDestDwn(d) {
+		var id = "destDwnStored";
+		var val = d;
+		var bdwn = document.getElementById('bzone');
+		bdwn.style.top = d + 'px';
+		localStorage.setItem(id, val);
+	}
+
+	function mvDestRht(r) {
+		var id = "destRhtStored";
+		var val = r;
+		var bdwn = document.getElementById('bzone');
+		bdwn.style.left = r + 'px';
+		localStorage.setItem(id, val);
+	}
+
+	function chngBackground(a) {
+		var id = "BkgrndStored";
+		var val = a;
+		localStorage.setItem(id, val);
+		document.getElementById('container').className = val;
+		//console.log(localStorage.getItem("BkgrndStored " + val));
+	}
+
+	function clearBackground() {
+		localStorage.clear();
+	}
+
+	function getSavedBkValue(v) {
+		if(!localStorage.getItem(v)) {
+			return "retangles";
+		}
+		return localStorage.getItem(v);
+	}
+
+	function check_storage() {
+		//check if there is any value in localStorage
+		if(localStorage.getItem("BkgrndStored") != null) {
+			//get that value
+			var val = localStorage.getItem("BkgrndStored");
+			console.log("checked" + val);
+			chngBackground(val); //call function
+		}
+		/*if (localStorage.getItem("destRhtStored") != null) {
+		    var rht = localStorage.getItem("destRhtStored");
+
+		        mvDestRht(rht);
+		}
+		if (localStorage.getItem("destDwnStored") != null) {
+		    var dwn = localStorage.getItem("destDwnStored");
+
+		        mvDestDwn(dwn);
+		}*/
+	}
+	</script>
+	<script type="application/javascript">
+	// Reload game:
+	function reLoad() {
+		var rst = document.getElementById("resetAudio");
+		rst.play();
+		//reLoad = location.reload();
+		setTimeout(function(){
+			reLoad = location.reload();	
+		}, 250 );
+		
+		    return false;
+	}
+	// opens settings box
+	function openRules() {
+		var h = location.hash;
+		var elm = document.getElementById('instruct');
+		if(h !== "") {
+			elm.classList.toggle("shown-instruct");
+			location.href = "";
+		} else {
+			elm.classList.toggle("shown-instruct");
+		}
+	}
+	/**
+	 * Checks if an integer is within ±x another integer.
+	 * @param {int} op - The integer in question
+	 * @param {int} target - The integer to compare to
+	 * @param {int} range - the range ±
+	 */
+	function nearInt(op, target, range) {
+		return op < target + range && op > target - range;
+		//range = 0;
+	}
+	document.addEventListener("click", function(div1, div2) {
+		// clear 2 elements on click
+		document.getElementById("restarts").innerHTML = "";
+		document.getElementsByClassName('collision')[0].style.opacity = "0";
+		var plma = document.getElementById('plAMoves').innerText;
+		var plmb = document.getElementById('plBMoves').innerText;
+		var div2 = document.getElementById('chaser');
+		var div1 = document.getElementById('player');
+		var x1 = div1.offsetLeft;
+		var y1 = div1.offsetTop;
+		var h1 = div1.outerHeight;
+		var w1 = div1.outerWidth;
+		var b1 = y1 + h1;
+		var r1 = x1 + w1;
+		var x2 = div2.offsetLeft;
+		var y2 = div2.offsetTop;
+		var h2 = div2.outerHeight;
+		var w2 = div2.outerWidth;
+		var b2 = y2 + h2;
+		var r2 = x2 + w2;
+		var j = (nearInt(x1, x2, 15) && nearInt(y1, y2, 15)) ? false : true; //b1 < y2 || y1 > b2  || r1 < x2 || x1 > r2
+		//console.log("LP"+x1  +"TP"+y1 + "LC"+x2  +"TC"+y2);
+		if(j === false) {
+			if( +plma > "3" && +plmb > "3" ) {
+			document.getElementById("collAudio").play();
+			//console.log("played");
+			document.getElementById('restarts').innerHTML = "PLAYER INCURSION....  (งツ)ว";
+			document.getElementsByClassName('collision')[0].style.opacity = 1;
+			}
+		}
+	});
+	/*
+	 * adding down and right together for either player
+	 * a=plyr 1; b=plyr 2; | d=dwn; r=rght | c/k score,skore
+	 */
+	function getWinA() {
+		var dca = document.getElementById("score").innerText;
+		var rca = document.getElementById("skore").innerText;
+		var sum = +dca + +rca;
+		document.getElementById('scoreAWin').innerHTML = parseInt(sum);
+	}
+
+	function getWinB() {
+		var dkb = document.getElementById("scoreb").innerText;
+		var rkb = document.getElementById("skoreb").innerText;
+		var sum = +dkb + +rkb; //p1 from p2 offset=86.333 +45.333
+		document.getElementById('scoreBWin').innerHTML = parseInt(sum);
+	}
+	</script>
+<script type="application/javascript">
+
+	var playNumber = 0;
+	var plAMoves   = 0;
+	var chaseNumber = 0;
+	var plBMoves    = 0;
+	var player = document.getElementById("player");
+	var chaser = document.getElementById("chaser");
+	var button = document.getElementById("button");
+	var buttonb = document.getElementById("buttonb");
+	var chaseme = document.getElementById("chaseme");
+	var chasemeb = document.getElementById("chasemeb");
+	// object movement player a
+	function moveDown(object) {
+		var dss = Math.floor(Math.random() * 50);
+		object.style.top = parseInt(object.style.top || 0) + (dss * 1) + 'px';
+	}
+
+	function moveLeft(object) {
+		var dss = Math.floor(Math.random() * 50);
+		object.style.left = parseInt(object.style.left || 0) + (dss * 1) + 'px';
+	}
+	// buttons start moves
+	button.onclick = function(element) {
+		moveDown(player);
+		var x = document.getElementById('player').documentOffsetTop;
+		document.getElementById("score").innerHTML = x;
+		document.getElementById('playerAMvs').innerHTML = `${1+playNumber++}`;
+		document.getElementById('plAMoves').innerHTML = `${1+plAMoves++}`;
+	}
+	chaseme.onclick = function(element) {
+			moveLeft(player);
+			var x = document.getElementById('player').documentOffsetLeft;
+			document.getElementById("skore").innerHTML = x;
+			document.getElementById('playerAMvs').innerHTML = `${1+playNumber++}`;
+			document.getElementById('plAMoves').innerHTML = `${1+plAMoves++}`;
+		}
+		// (player b)
+	function moveRight(object) {
+		var dss = Math.floor(Math.random() * 50);
+		object.style.left = parseInt(object.style.left || 0) + (dss * 1) + 'px';
+	}
+
+	function moveUp(object) {
+		var dss = Math.floor(Math.random() * 50);
+		object.style.top = parseInt(object.style.top || 0) + (dss * 1) + 'px';
+	}
+	// buttons start moves
+	buttonb.onclick = function(element) {
+		moveUp(chaser);
+		var x = document.getElementById('chaser').documentOffsetTop;
+		document.getElementById("scoreb").innerHTML = x;
+		document.getElementById('playerBMvs').innerHTML = `${1+chaseNumber++}`;
+		document.getElementById('plBMoves').innerHTML = `${1+plBMoves++}`;
+	}
+	chasemeb.onclick = function(element) {
+		moveLeft(chaser);
+		var x = document.getElementById('chaser').documentOffsetLeft;
+		document.getElementById("skoreb").innerHTML = x;
+		document.getElementById('playerBMvs').innerHTML = `${1+chaseNumber++}`;
+		document.getElementById('plBMoves').innerHTML = `${1+plBMoves++}`;
+	}
+	Object.defineProperty(Element.prototype, 'documentOffsetTop', {
+		get: function() {
+			return this.offsetTop + (this.offsetParent ? this.offsetParent.documentOffsetTop : 0);
+		}
+	});
+	Object.defineProperty(Element.prototype, 'documentOffsetLeft', {
+		get: function() {
+			return this.offsetLeft + (this.offsetParent ? this.offsetParent.documentOffsetLeft : 0);
+		}
+	});
+</script>
+	
+</body>
+</html>
